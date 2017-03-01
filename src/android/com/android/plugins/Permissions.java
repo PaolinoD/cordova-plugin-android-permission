@@ -1,6 +1,7 @@
 package com.android.plugins;
 
 import android.os.Build;
+import android.content.pm.PackageManager;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -61,6 +62,11 @@ public class Permissions extends CordovaPlugin {
 
         JSONObject returnObj = new JSONObject();
         if (permissions != null && permissions.length > 0) {
+            if(permissions.length > 1) {
+                for (int i = 0; i < permissions.length; i++) {
+                    addProperty(returnObj, permissions[i], grantResults[i] == PackageManager.PERMISSION_GRANTED);
+                }
+            }
             //Call hasPermission again to verify
             boolean hasAllPermissions = hasAllPermissions(permissions);
             addProperty(returnObj, ACTION_HAS_PERMISSION, hasAllPermissions);
